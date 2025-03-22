@@ -1,0 +1,60 @@
+# Tic-Tac-Toe Game in Python
+
+# Function to print the game board
+def print_board(board):
+    for row in range(3):
+        print(" | ".join(board[row]))
+        if row < 2:
+            print("--------")
+
+# Function to check if someone has won
+def check_win(board, player):
+    # Check rows, columns, and diagonals
+    for i in range(3):
+        if all([board[i][j] == player for j in range(3)]) or all([board[j][i] == player for j in range(3)]):
+            return True
+    if (board[0][0] == player and board[1][1] == player and board[2][2] == player) or \
+       (board[0][2] == player and board[1][1] == player and board[2][0] == player):
+        return True
+    return False
+
+# Function to check if the board is full
+def check_full(board):
+    return all(board[i][j] != " " for i in range(3) for j in range(3))
+
+# Function to play the game
+def play_game():
+    board = [[" " for _ in range(3)] for _ in range(3)]  # Empty 3x3 board
+    current_player = "X"  # Player X starts the game
+    while True:
+        print_board(board)
+        print(f"Player {current_player}'s turn")
+        
+        # Take input for row and column
+        row, col = -1, -1
+        while row not in range(3) or col not in range(3) or board[row][col] != " ":
+            try:
+                row, col = map(int, input("Enter row and column (0, 1, 2): ").split())
+            except ValueError:
+                print("Invalid input, please enter two integers separated by a space.")
+        
+        # Update the board
+        board[row][col] = current_player
+        
+        # Check if the current player has won
+        if check_win(board, current_player):
+            print_board(board)
+            print(f"Player {current_player} wins!")
+            break
+        
+        # Check if the board is full (a tie)
+        if check_full(board):
+            print_board(board)
+            print("It's a tie!")
+            break
+        
+        # Switch player
+        current_player = "O" if current_player == "X" else "X"
+
+# Start the game
+play_game()
